@@ -1,0 +1,152 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Welcome to Aloha-Venues!</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            padding: 100px;
+        }
+
+        .parent {
+            position: relative;
+            top: 50vh;
+            left: 50vw;
+            transform: translate(-75%, -75%);
+        }
+
+        .circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: azure;
+            background-image: url('images/aloha_no_bg.gif');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .image-holder {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            /*animation: rotate linear 5s infinite forwards;*/
+            animation-name: rotate;
+            animation-duration: 25s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+
+        .image-holder:hover {
+            animation-play-state: paused;
+        }
+
+        .image-holder img {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
+
+        .image-holder img:nth-child(1) {
+            transform: translate(-25%, -25%);
+        }
+
+        .image-holder img:nth-child(2) {
+            transform: translate(calc(300px - 75%), calc(300px - 75%));
+        }
+
+        
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #venue-display {
+            width: 200px;
+            height: 50px;
+            padding: 0;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 290px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-family: cursive;
+            font-size: 100%;
+            font-weight: bold;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+
+<body>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" />
+    <div class="container">
+        <div class="row">
+            <div class="parent">
+                <div class="circle">
+                </div>
+                <div class="image-holder">
+                    <a href="http://willows.aloha-venues.com">
+                        <img data-text="Willows" src="./images/The-Willows.jpg" alt="">
+                    </a>
+                    <img data-text="Fishermans Warf"
+                        src="./images/Fishermans-Wharf-Tent.jpg" alt="">
+                </div>
+                <canvas id="venue-display"></canvas>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div id="out"></div>
+    <script type="text/javascript">
+        var images = document.getElementsByTagName('img');
+
+        for (var i = 0; i < images.length; i++) {
+            images[i].addEventListener("mouseover", updateName)
+        }
+
+        function updateName() {
+            var c = document.getElementById("venue-display");
+            var ctx = c.getContext("2d");
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.strokeStyle = "red";
+            ctx.font = window.getComputedStyle(c, null).getPropertyValue('font');
+            // default size for font
+
+            var ratio = (c.width / ctx.measureText(this.getAttribute('data-text')).width)*0.9;   // calc ratio
+            font_parts = ctx.font.split(' ');
+            
+            ctx.font = ratio + 'em ' + ' ' + font_parts[font_parts.length - 1];
+            
+            ctx.textAlign = "center";
+            ctx.fillText(this.getAttribute('data-text'), c.width / 2, c.height / 2);
+
+        }
+
+    </script>
+</body>
+
+</html>
