@@ -1,5 +1,5 @@
 // create a variable to store the products 'database' in
-var products;
+var products =[];
 
 function isNonNegInt(q, return_errors = false) {
     errors = []; // assume no errors at first
@@ -99,6 +99,18 @@ function process_purchase() {
     });
     
 }
+function fetchProductsData(){
+    return fetch('products.json')
+    .then(response => response.json())
+    .then(function(response) {
+        // console.log(JSON.stringify(response.query));
+        return response;
+
+    })
+    .catch(function(error) {
+        console.log('Network request for products.json failed with response ' + response.status + ': ' + response.statusText);
+    });    
+}
 
 var params = (new URL(document.location)).searchParams; // get the query string which has the form data
 
@@ -107,16 +119,15 @@ window.onload = function () {
         // use fetch to retrieve it, and report any errors that occur in the fetch operation
     // once the products have been successfully loaded and formatted as a JSON object
     // using response.json(), run the initialize() function
-    fetch('products.json').then(function (response) {
-        if (response.ok) {
-            response.json().then(function (json) {
-                products = json;
-                display_products();
-            });
-        } else {
-            console.log('Network request for products.json failed with response ' + response.status + ': ' + response.statusText);
+
+    var fetchData = fetchProductsData();
+    fetchData.then( function(data) {  
+        products = data;
+        display_products();
         }
-    });
+    ); //not empty 
+    
+
     
     // form was submitted so check that quantities are valid then redirect to invoice if ok.
     if (params.has('purchase_submit')) {
