@@ -10,15 +10,7 @@ if (fs.existsSync(user_info_file)) {
     
     var data = fs.readFileSync(user_info_file, 'utf-8');
     var userdata = JSON.parse(data);
-    username = 'newuser';
-    userdata[username] = {};
-    userdata[username].password = 'newpass';
-    userdata[username].email = 'newuser@user.com';
-    userdata[username].name = "The New Guy";
-
-    console.log(userdata["newuser"]["password"]);
-    fs.writeFileSync(user_info_file, JSON.stringify(userdata));
-
+  
     console.log(`${user_info_file} has ${file_stats.size} characters`);
 } else {
     console.log("hey! " + user_info_file + " doesn't exist!");
@@ -27,11 +19,13 @@ if (fs.existsSync(user_info_file)) {
 app.use(myParser.urlencoded({ extended: true }));
 
 app.get("/login", function (request, response) {
+    console.log(request.query); // print out q-str
     // Give a simple login form
     str = `
 <body>
+<h1>${request.query["error"]}</h1>
 <form action="/check_login?quantity=999" method="POST">
-<input type="text" name="username" size="40" placeholder="enter username" ><br />
+<input type="text" name="username" size="40" placeholder="enter username" value=${request.query["username"]} ><br />
 <input type="password" name="password" size="40" placeholder="enter password"><br />
 <input type="submit" value="Submit" id="submit">
 </form>
